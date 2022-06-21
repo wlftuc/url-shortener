@@ -6,6 +6,15 @@ export default function Slug() {
   return <div>Slug</div>;
 }
 
+/**
+ * 
+ * @TODO - Add some level of string matching.
+ * If a slug/url does not exist, return the slug/url which closely matches to the 
+ * original input
+ *
+ * Quite redundant, but could teach you a lot of stuff.
+ */
+
 export const getServerSideProps = async (context) => {
   const currentSlug: string = context.params.slug;
 

@@ -1,7 +1,9 @@
 import React, { SyntheticEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import { motion, AnimatePresence } from "framer-motion";
+
 import Link from "next/link";
+
+import toast, { Toaster } from "react-hot-toast";
 
 type ShortenedURL = {
   slug: string;
@@ -38,10 +40,17 @@ export default function Index() {
 
     return data;
   };
-
+  const notify = () =>
+    toast.success("This URL has already been shortened!", {
+      duration: 4000,
+    });
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     const shortenedUrl = await shortenURLTransition();
+
+    if (shortenedUrl.isExisting) {
+      notify();
+    }
 
     setShortMeta(shortenedUrl);
   };
@@ -76,25 +85,28 @@ export default function Index() {
             </form>
             <div className="border px-2 py-2 mt-5 rounded-md">
               Shortened URL:{" "}
-              <Link target={'_blank'} href={`/${shortMeta.slug}`}>
-                <a>
+              <Link target={"_blank"} href={`/${shortMeta.slug}`}>
+                <a target={"_blank"} className="underline mx-2 text-green-600">
                   {host}/{shortMeta.slug || shortMeta.error}
                 </a>
               </Link>
-             
+              <div></div>
             </div>
-
-            
-          </div>
-          <div>
-          {shortMeta.isExisting && (
-                <div className="p-2 border rounded-md mt-3 bg-green-200">
-                  This URL has already been shortened! ✅
-                </div>
-              )}
           </div>
         </div>
       </div>
+      {/* <Toaster 
+      toastOptions={{
+        className: "p-2 border rounded-md mt-3 bg-green-200",
+        style: {
+          padding: '0.5rem',
+          borderWidth: '1px',
+          backgroundColor: 'rgb(187 247 208)',
+          borderRadius: '0.375rem'
+        }
+      }}
+      /> */}
+      <Toaster />
     </section>
   );
 }
