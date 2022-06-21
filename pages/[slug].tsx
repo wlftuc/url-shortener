@@ -15,7 +15,7 @@ export default function Slug() {
  * Quite redundant, but could teach you a lot of stuff.
  */
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = async (context: { params: { slug: string; }; }) => {
   const currentSlug: string = context.params.slug;
 
   const redirectTo = await prisma.shortener.findUnique({
