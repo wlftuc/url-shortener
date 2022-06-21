@@ -1,14 +1,27 @@
 import React, { SyntheticEvent, useEffect, useRef, useState } from "react";
-
+import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
-
-type ShortenedUrl = {
-  url: string;
-}
+type ShortenedURL = {
+  slug: string;
+  origin: "web" | "bot";
+  error?: string;
+  isExisting?: boolean;
+};
 
 export default function Index() {
   const [url, setUrl] = useState("");
+  const [shortMeta, setShortMeta] = useState<ShortenedURL>({
+    slug: "",
+    origin: "web",
+  });
+  const [host, setHost] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    setHost(window.location.host);
+  }, [router.pathname]);
 
   const shortenURLTransition = async () => {
     const res = await fetch("/api/shorten", {
@@ -17,19 +30,20 @@ export default function Index() {
         "Content-type": "application/json",
       },
       body: JSON.stringify({
-        url
+        url,
+        origin: "WEB",
       }),
     });
-    const data: ShortenedUrl = await res.json();
+    const data: ShortenedURL = await res.json();
 
-    return data.url;
+    return data;
   };
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    const shortenedUrl = await shortenURLTransition()
+    const shortenedUrl = await shortenURLTransition();
 
-    console.log(shortenedUrl)
+    setShortMeta(shortenedUrl);
   };
 
   return (
@@ -53,13 +67,31 @@ export default function Index() {
               {/* https://bobbyhadz.com/blog/typescript-property-value-not-exist-type-eventtarget */}
               <div className="text-center">
                 <button
-                  className="border px-2 py-1 my-2 rounded-md"
+                  className="border px-2 py-1 mt-5 rounded-md"
                   onClick={() => {}}
                 >
                   Shorten
                 </button>
               </div>
             </form>
+            <div className="border px-2 py-2 mt-5 rounded-md">
+              Shortened URL:{" "}
+              <Link target={'_blank'} href={`/${shortMeta.slug}`}>
+                <a>
+                  {host}/{shortMeta.slug || shortMeta.error}
+                </a>
+              </Link>
+             
+            </div>
+
+            
+          </div>
+          <div>
+          {shortMeta.isExisting && (
+                <div className="p-2 border rounded-md mt-3 bg-green-200">
+                  This URL has already been shortened! ✅
+                </div>
+              )}
           </div>
         </div>
       </div>
