@@ -18,7 +18,7 @@ export const getServerSideProps = async (context) => {
   if (!redirectTo) {
     return {
       redirect: {
-        destination: "/invalid-url",
+        destination: "/404",
       },
     };
   }
