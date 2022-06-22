@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 
 import Link from "next/link";
 
+import { ToastUX } from "../lib/toasts";
 import toast, { Toaster } from "react-hot-toast";
 
 type ShortenedURL = {
@@ -21,6 +22,7 @@ export default function Index() {
   });
   const [host, setHost] = useState("");
   const router = useRouter();
+  const toasts = new ToastUX();
 
   useEffect(() => {
     setHost(window.location.host);
@@ -41,28 +43,21 @@ export default function Index() {
 
     return data;
   };
-  const isExistingToast = () =>
-    toast.success("This URL has already been shortened!", {
-      duration: 4000,
-    });
-  const isErrorToast = (err: string) =>
-    toast.error("An error occurred! Please try again later. " + err);
 
-  const isSuccessToast = () => toast.success("Your URL has been shortened!");
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     const shortenedUrl = await shortenURLTransition();
 
     if (!shortenedUrl.error && !shortenedUrl.isExisting) {
-      isSuccessToast();
+      toasts.isSuccess();
     }
 
     if (shortenedUrl.error) {
-      isErrorToast(shortenedUrl.errResp);
+      toasts.isError(shortenedUrl.errResp);
     }
 
     if (shortenedUrl.isExisting) {
-      isExistingToast();
+      toasts.isExisting();
     }
 
     setShortMeta(shortenedUrl);

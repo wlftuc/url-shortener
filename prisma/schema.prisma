@@ -11,7 +11,8 @@ datasource db {
 }
 
 model Shortener {
-  id         Int    @id @default(autoincrement())
-  slug       String @unique
+  id         Int     @id @default(autoincrement())
+  slug       String  @unique
   redirectTo String
+  origin     String?
 }
