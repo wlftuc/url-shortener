@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { ToastUX } from "../lib/toasts";
 import toast, { Toaster } from "react-hot-toast";
+import QRCode from "react-qr-code";
 
 type ShortenedURL = {
   slug: string;
@@ -100,6 +101,13 @@ export default function Index() {
               </Link>
               <div></div>
             </div>
+          </div>
+          <div className="flex items-center justify-center">
+            <QRCode
+              className="mt-3"
+              size={100}
+              value={host + "/" + shortMeta.slug}
+            />
           </div>
         </div>
       </div>
