@@ -8,8 +8,9 @@ import toast, { Toaster } from "react-hot-toast";
 type ShortenedURL = {
   slug: string;
   origin: "web" | "bot";
-  error?: string;
+  error?: boolean;
   isExisting?: boolean;
+  errResp?: string;
 };
 
 export default function Index() {
@@ -40,16 +41,29 @@ export default function Index() {
 
     return data;
   };
-  const notify = () =>
+  const isExistingToast = () =>
     toast.success("This URL has already been shortened!", {
       duration: 4000,
     });
+  const isErrorToast = (err: string) =>
+    toast.error("An error occurred! Please try again later. " + err);
+
+  const isSuccessToast = () => toast.success("Your URL has been shortened!");
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     const shortenedUrl = await shortenURLTransition();
 
+
+    if(!shortenedUrl.error && !shortenedUrl.isExisting) {
+      isSuccessToast()
+    }
+
+    if (shortenedUrl.error) {
+      isErrorToast(shortenedUrl.errResp);
+    }
+
     if (shortenedUrl.isExisting) {
-      notify();
+      isExistingToast();
     }
 
     setShortMeta(shortenedUrl);

@@ -17,7 +17,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     return res.status(202).json({
       slug: isExistingURL.slug,
       origin: isExistingURL.redirectTo,
-      isExisting: true
+      isExisting: true,
     });
   }
 
@@ -31,10 +31,15 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
     res
       .status(200)
-      .json({ slug: shortenNewURL.slug, origin: shortenNewURL.redirectTo });
+      .json({
+        slug: shortenNewURL.slug,
+        origin: shortenNewURL.redirectTo,
+        isExisting: false,
+      });
   } catch (err) {
     return res.status(400).json({
-      error: err,
+      error: true,
+      errResp: err.message
     });
   }
 }
