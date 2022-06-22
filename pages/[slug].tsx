@@ -7,15 +7,16 @@ export default function Slug() {
 }
 
 /**
- * 
+ *
  * @TODO - Add some level of string matching.
- * If a slug/url does not exist, return the slug/url which closely matches to the 
- * original input
+ * If a slug/url does not exist, return the slug/url which closely matches to the original input
  *
  * Quite redundant, but could teach you a lot of stuff.
  */
 
-export const getServerSideProps = async (context: { params: { slug: string; }; }) => {
+export const getServerSideProps = async (context: {
+  params: { slug: string };
+}) => {
   const currentSlug: string = context.params.slug;
 
   const redirectTo = await prisma.shortener.findUnique({
