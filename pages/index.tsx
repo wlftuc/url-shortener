@@ -53,9 +53,8 @@ export default function Index() {
     e.preventDefault();
     const shortenedUrl = await shortenURLTransition();
 
-
-    if(!shortenedUrl.error && !shortenedUrl.isExisting) {
-      isSuccessToast()
+    if (!shortenedUrl.error && !shortenedUrl.isExisting) {
+      isSuccessToast();
     }
 
     if (shortenedUrl.error) {
