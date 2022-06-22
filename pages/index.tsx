@@ -21,6 +21,7 @@ export default function Index() {
     slug: "",
     origin: "web",
   });
+  const [loading, setLoading] = useState(false)
   const [host, setHost] = useState("");
   const router = useRouter();
   const toasts = new ToastUX();
@@ -47,7 +48,9 @@ export default function Index() {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    setLoading(true)
     const shortenedUrl = await shortenURLTransition();
+    setLoading(false)
 
     if (!shortenedUrl.error && !shortenedUrl.isExisting) {
       toasts.isSuccess();
@@ -88,7 +91,7 @@ export default function Index() {
                   className="border px-2 py-1 mt-5 rounded-md"
                   onClick={() => {}}
                 >
-                  Shorten
+                  {loading ? "Working....": "Shorten"}
                 </button>
               </div>
             </form>
