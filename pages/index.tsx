@@ -77,6 +77,7 @@ export default function Index() {
           <div className="relative">
             <form onSubmit={handleSubmit}>
               <input
+              required
                 className="w-full p-3 mt-1 text-sm border-2 border-gray-200 rounded-md"
                 id="url"
                 type="url"

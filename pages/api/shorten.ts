@@ -6,6 +6,18 @@ import { prisma } from "../../lib/prisma"; // TYPE SAFE WOHOOO!
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { url, origin } = req.body;
 
+
+  const x = new URL(url)
+   
+
+  if(x.hostname!== 'http' || x.hostname !== 'https') {
+    return res.status(400).json({
+      error: true,
+      errResp: 'Invalid URL protocol.'
+    })
+  }
+  
+
   let slug = (Math.random() + 1).toString(36).substring(7);
 
   const isExistingURL = await prisma.shortener.findFirst({
