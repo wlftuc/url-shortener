@@ -10,7 +10,7 @@ export class ToastUX {
   }
 
   isError(err: string) {
-    toast.error("An error occurred! Please try again later. " + err);
+    toast.error(err);
   }
 
   isSuccess() {

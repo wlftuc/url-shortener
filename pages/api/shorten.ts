@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+import { URL } from "url";
 import { prisma } from "../../lib/prisma"; // TYPE SAFE WOHOOO!
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
@@ -26,20 +27,19 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       data: {
         slug: slug,
         redirectTo: url,
+        origin: origin,
       },
     });
 
-    res
-      .status(200)
-      .json({
-        slug: shortenNewURL.slug,
-        origin: shortenNewURL.redirectTo,
-        isExisting: false,
-      });
+    res.status(200).json({
+      slug: shortenNewURL.slug,
+      origin: shortenNewURL.redirectTo,
+      isExisting: false,
+    });
   } catch (err) {
     return res.status(400).json({
       error: true,
-      errResp: err.message
+      errResp: err.message,
     });
   }
 }
