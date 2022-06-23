@@ -18,6 +18,6 @@ This URL shortener was made for 3 core reasons:
 
 Run ` openssl rand -base64 32` to generate one.
 
-2. DATABASE_URL
+2. `DATABASE_URL`
 
 Your PostgreSQL database URL.
