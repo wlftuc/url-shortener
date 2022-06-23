@@ -9,7 +9,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
   if(!password) {
     return res.status(400).json({
-      err: true,
+      error: true,
       errResp: "Invalid API key."
     })
   }
