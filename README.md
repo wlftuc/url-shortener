@@ -10,6 +10,26 @@ This URL shortener was made for 3 core reasons:
 
 3. Learn more about relational databases 
 
+## Cloning
+
+
+1. 
+```git
+git clone https://github.com/wlftuc/url-shortener
+```
+2.
+```bash
+cd url-shortener
+```
+3.
+```bash
+npm install 
+```
+
+4.
+```
+npx next dev
+```
 
 
 ## Environment Variables
