@@ -54,7 +54,7 @@ This URL shortener was made for 3 core reasons:
 
 ## TODOs
 
-- [ ] Hash URLs
+- [x] Hash URLs
 - [ ] Add feature to make private URLs
 - [ ] If slug is not found in database, ask the user if they meant the *closest* matching slug instead.
 
