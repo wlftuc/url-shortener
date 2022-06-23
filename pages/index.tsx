@@ -21,7 +21,7 @@ export default function Index() {
     slug: "",
     origin: "web",
   });
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [host, setHost] = useState("");
   const router = useRouter();
   const toasts = new ToastUX();
@@ -31,16 +31,19 @@ export default function Index() {
   }, [router.pathname]);
 
   const shortenURLTransition = async () => {
-    const res = await fetch("/api/shorten", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        url,
-        origin: "WEB",
-      }),
-    });
+    const res = await fetch(
+      `/api/shorten?password=${process.env.API_ROUTE_TOKEN}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          url,
+          origin: "WEB",
+        }),
+      }
+    );
     const data: ShortenedURL = await res.json();
 
     return data;
@@ -48,9 +51,9 @@ export default function Index() {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
     const shortenedUrl = await shortenURLTransition();
-    setLoading(false)
+    setLoading(false);
 
     if (!shortenedUrl.error && !shortenedUrl.isExisting) {
       toasts.isSuccess();
@@ -77,7 +80,7 @@ export default function Index() {
           <div className="relative">
             <form onSubmit={handleSubmit}>
               <input
-              required
+                required
                 className="w-full p-3 mt-1 text-sm border-2 border-gray-200 rounded-md"
                 id="url"
                 type="url"
@@ -92,7 +95,7 @@ export default function Index() {
                   className="border px-2 py-1 mt-5 rounded-md"
                   onClick={() => {}}
                 >
-                  {loading ? "Working....": "Shorten"}
+                  {loading ? "Working...." : "Shorten"}
                 </button>
               </div>
             </form>

@@ -5,6 +5,14 @@ import { prisma } from "../../lib/prisma"; // TYPE SAFE WOHOOO!
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { url, origin } = req.body;
+  const {password} = req.query
+
+  if(!password) {
+    return res.status(400).json({
+      err: true,
+      errResp: "Invalid API key."
+    })
+  }
 
   let slug = (Math.random() + 1).toString(36).substring(7);
 

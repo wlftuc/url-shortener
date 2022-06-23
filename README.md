@@ -10,6 +10,14 @@ This URL shortener was made for 3 core reasons:
 
 3. Learn more about relational databases 
 
-That's about it. This project will be self-hosted, so you can pretty much get one of your *own* shorteners up and running within minutes.
 
 
+## Environment Variables
+
+1. `API_ROUTE_TOKEN` 
+
+Run ` openssl rand -base64 32` to generate one.
+
+2. DATABASE_URL
+
+Your PostgreSQL database URL.
