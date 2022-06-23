@@ -12,6 +12,7 @@ type ShortenedURL = {
   origin: "web" | "bot";
   error?: boolean;
   isExisting?: boolean;
+  link?: string
   errResp?: string;
 };
 
