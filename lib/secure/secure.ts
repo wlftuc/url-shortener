@@ -1,20 +1,28 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 const CryptoJS = require("crypto-js");
 
-import { HEX_KEY } from "../secrets/secret";
+class Hash {
+  key: string;
+  keyUtf: string;
+  iv: string;
 
-let key = CryptoJS.enc.Hex.parse(HEX_KEY);
+  constructor(key: string) {
+    this.key = key;
+    this.keyUtf = CryptoJS.enc.Utf8.parse(key);
+    this.iv = CryptoJS.enc.Base64.parse(key);
+  }
 
-let iv = CryptoJS.enc.Hex.parse(`"${process.env.SECURE_AES_IV}"`);
+  encrypt(text: string) {
+    return CryptoJS.AES.encrypt(text, this.keyUtf, { iv: this.iv }).toString();
+  }
 
-function encrypt(url: string) {
-  return CryptoJS.AES.encrypt(url, key, { iv: iv }).toString();
+  decrypt(cipher: string) {
+    const dec = CryptoJS.AES.decrypt(cipher, this.keyUtf, {
+      iv: this.iv,
+    });
+
+    return CryptoJS.enc.Utf8.stringify(dec);
+  }
 }
 
-function decrypt(cipherText: string) {
-  return CryptoJS.AES.decrypt(cipherText, key, { iv: iv }).toString(
-    CryptoJS.enc.Utf8
-  );
-}
-
-export { decrypt, encrypt };
+export { Hash };

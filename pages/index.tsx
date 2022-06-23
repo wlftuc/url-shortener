@@ -32,7 +32,7 @@ export default function Index() {
 
   const shortenURLTransition = async () => {
     const res = await fetch(
-      `/api/shorten?password=${process.env.API_ROUTE_TOKEN}`,
+      `/api/shorten?password=${process.env.NEXT_PUBLIC_API_KEY}`,
       {
         method: "POST",
         headers: {

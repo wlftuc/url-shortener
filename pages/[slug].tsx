@@ -1,6 +1,7 @@
 import React from "react";
 
 import { prisma } from "../lib/prisma";
+import { Hash } from "../lib/secure/secure";
 
 export default function Slug() {
   return <div>Slug</div>;
@@ -18,6 +19,7 @@ export const getServerSideProps = async (context: {
   params: { slug: string };
 }) => {
   const currentSlug: string = context.params.slug;
+  const hash = new Hash(process.env.API_ROUTE_TOKEN)
 
   const redirectTo = await prisma.shortener.findUnique({
     where: {
@@ -35,7 +37,7 @@ export const getServerSideProps = async (context: {
 
   return {
     redirect: {
-      destination: redirectTo.redirectTo,
+      destination: hash.decrypt(redirectTo.redirectTo),
     },
   };
 };
