@@ -1,17 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { URL } from "url";
-import { prisma } from "../../lib/prisma"; // TYPE SAFE WOHOOO!
+import { prisma } from "../../lib/prisma";
+import { encrypt, decrypt } from "../../lib/secure/secure";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { url, origin } = req.body;
-  const {password} = req.query
+  const { password } = req.query;
 
-  if(!password) {
+  if (!password) {
     return res.status(400).json({
       error: true,
-      errResp: "Invalid API key."
-    })
+      errResp: "Invalid API key.",
+    });
   }
 
   let slug = (Math.random() + 1).toString(36).substring(7);
