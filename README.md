@@ -13,20 +13,20 @@ This URL shortener was made for 3 core reasons:
 ## Cloning
 
 
-1. 
+1. Clone the repository
 ```git
 git clone https://github.com/wlftuc/url-shortener
 ```
-2.
+2. Change directory
 ```bash
 cd url-shortener
 ```
-3.
+3. Install dependencies
 ```bash
 npm install 
 ```
 
-4.
+4. Start the server
 ```
 npx next dev
 ```
