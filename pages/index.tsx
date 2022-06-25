@@ -80,7 +80,7 @@ export default function Index({ html }) {
   };
 
   return (
-    <section className="bg-gray-100 p-5 h-screen">
+    <section className="bg-gray-100  h-screen">
       <div className="max-w-2xl  mx-auto flex items-center justify-center h-screen">
         <div className="relative">
           <label className=" text-5xl font-semibold" htmlFor="email">
@@ -142,7 +142,7 @@ export default function Index({ html }) {
                   {host}/{shortMeta.slug || shortMeta.error}
                 </a>
               </Link>
-              {/* <FAQ file={html} /> */}
+             
             </div>
           </div>
         </div>
