@@ -8,10 +8,7 @@ import { Hash } from "../../lib/secure/secure";
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { url, origin, password: URLPassword } = req.body;
   const { password } = req.query;
-  const { API_ROUTE_TOKEN } = process.env;
-
-
-  console.log(URLPassword)
+  const { HASH_TOKEN } = process.env;
 
   if (!password || password !== process.env.NEXT_PUBLIC_API_KEY) {
     return res.status(400).json({
@@ -20,7 +17,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     });
   }
 
-  const hash = new Hash(API_ROUTE_TOKEN);
+  const hash = new Hash(HASH_TOKEN);
   const encryptedURL = hash.encrypt(url);
 
   let slug = (Math.random() + 1).toString(36).substring(7);
@@ -31,12 +28,13 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     },
   });
 
-  if (isExistingURL) {
+  if (isExistingURL && !URLPassword) {
     return res.status(202).json({
       slug: isExistingURL.slug,
       link: hash.decrypt(isExistingURL.redirectTo),
       origin: isExistingURL.origin,
       isExisting: true,
+      locked: isExistingURL.locked,
     });
   }
 
@@ -46,6 +44,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         slug: slug,
         redirectTo: encryptedURL,
         origin: origin,
+        password: hash.hashPassword(URLPassword),
+        locked: password == null ? false : true,
       },
     });
 

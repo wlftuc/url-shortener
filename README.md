@@ -34,7 +34,7 @@ This URL shortener was made for 3 core reasons:
 
 ## Environment Variables
 
-1. `API_ROUTE_TOKEN` 
+1. `HASH_TOKEN` 
 
     Run ` openssl rand -base64 32` to generate one.
 
@@ -55,7 +55,7 @@ This URL shortener was made for 3 core reasons:
 ## TODOs
 
 - [x] Hash URLs
-- [ ] Add feature to make private URLs
+- [x] Add feature to make private URLs
 - [ ] If slug is not found in database, ask the user if they meant the *closest* matching slug instead.
 
 

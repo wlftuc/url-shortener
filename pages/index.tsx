@@ -27,7 +27,7 @@ export default function Index({ html }) {
     origin: "web",
   });
   const [needPassword, setNeedPassword] = useState(false);
-  const [URLPassword, setURLPassword] = useState(null);
+  const [URLPassword, setURLPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [host, setHost] = useState("");

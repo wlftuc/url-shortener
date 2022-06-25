@@ -2,13 +2,22 @@
 
 import { Hash } from "../../lib/secure/secure";
 
-let { API_ROUTE_TOKEN, SECURE_AES_IV } = process.env;
+let { HASH_TOKEN, SECURE_AES_IV } = process.env;
 
 export default function handler(req, res) {
-  const hash = new Hash(SECURE_AES_IV, API_ROUTE_TOKEN);
+  const hash = new Hash(HASH_TOKEN);
 
   const e = hash.encrypt("https://helloworld.com");
   const d = hash.decrypt(e);
+
+
+
+  const hashPass = hash.hashPassword("Hello world!").toString()
+
+  console.log(hashPass)
+
+
+  if(hashPass === hash.hashPassword("Hello world!").toString()) console.log(true)
 
   
 
