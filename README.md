@@ -42,7 +42,7 @@ This URL shortener was made for 3 core reasons:
 
     Your PostgreSQL database URL.
 
-## Concept 
+# Concept 
 
 
 ### Without Passwords
@@ -77,7 +77,7 @@ When the user visits the slug, they get asked to input the password. A few steps
 * If they input the correct password
     
     > Check by hashing the password and matching it with the one in the database
-    * Client-side redirect them to the URl
+    * Client-side redirect them to the URL.
 * If they input the incorrect password
     * Display a warning until the input the correct one.
 
