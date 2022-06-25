@@ -75,6 +75,7 @@ The original process pretty much remains the same. All we do is add a few steps 
 When the user visits the slug, they get asked to input the password. A few steps:
 
 * If they input the correct password
+    
     > Check by hashing the password and matching it with the one in the database
     * Client-side redirect them to the URl
 * If they input the incorrect password
