@@ -50,6 +50,7 @@ export default function Index({ html }) {
           url,
           origin: "WEB",
           password: needPassword ? URLPassword : null,
+          locked: needPassword
         }),
       }
     );

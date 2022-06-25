@@ -6,7 +6,7 @@ import { prisma } from "../../lib/prisma";
 import { Hash } from "../../lib/secure/secure";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  const { url, origin, password: URLPassword } = req.body;
+  const { url, origin, password: URLPassword, locked } = req.body;
   const { password } = req.query;
   const { HASH_TOKEN } = process.env;
 
@@ -44,8 +44,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         slug: slug,
         redirectTo: encryptedURL,
         origin: origin,
-        password: hash.hashPassword(URLPassword),
-        locked: password == null ? false : true,
+        password: URLPassword == null ? null : hash.hashPassword(URLPassword),
+        locked: locked,
       },
     });
 
