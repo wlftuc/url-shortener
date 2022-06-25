@@ -5,7 +5,10 @@ import Link from "next/link";
 
 import { ToastUX } from "../lib/toasts";
 import { Toaster } from "react-hot-toast";
-import FAQ from "../components/FAQ";
+
+import { storeInLocalStorage } from "../lib/storage/setlocal";
+
+import DrawerLinks from "../components/Drawer";
 
 import { unified } from "unified";
 import remarkParse from "remark-parse";
@@ -20,6 +23,12 @@ type ShortenedURL = {
   errResp?: string;
 };
 
+type LinkMeta = {
+  object: LinkMeta;
+  link: string;
+  password: string;
+};
+
 export default function Index({ html }) {
   const [url, setUrl] = useState("");
   const [shortMeta, setShortMeta] = useState<ShortenedURL>({
@@ -28,6 +37,7 @@ export default function Index({ html }) {
   });
   const [needPassword, setNeedPassword] = useState(false);
   const [URLPassword, setURLPassword] = useState("");
+  const [linkMeta, setLinkMeta] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [host, setHost] = useState("");
@@ -50,7 +60,7 @@ export default function Index({ html }) {
           url,
           origin: "WEB",
           password: needPassword ? URLPassword : null,
-          locked: needPassword
+          locked: needPassword,
         }),
       }
     );
@@ -61,6 +71,7 @@ export default function Index({ html }) {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+
     setLoading(true);
     const shortenedUrl = await shortenURLTransition();
     setLoading(false);
@@ -81,7 +92,7 @@ export default function Index({ html }) {
   };
 
   return (
-    <section className="bg-gray-100  h-screen">
+    <section className="  h-screen">
       <div className="max-w-2xl  mx-auto flex items-center justify-center h-screen">
         <div className="relative">
           <label className=" text-5xl font-semibold" htmlFor="email">
@@ -89,10 +100,10 @@ export default function Index({ html }) {
           </label>
           <div className="relative">
             <form className="mt-4" onSubmit={handleSubmit}>
-              <label className="font-bold text-[#442E26]">Your URL</label>
+              <label className="font-bold">Your URL</label>
               <input
                 required
-                className="w-full p-3 mt-1 text-sm border-2 border-gray-200 rounded-md"
+                className="w-full  p-3 mt-1 text-sm border rounded-md"
                 id="url"
                 type="url"
                 value={url}
@@ -108,14 +119,16 @@ export default function Index({ html }) {
                 Make URL password-locked?
               </div>
               <div className="mt-2">
-                <label className="font-bold text-[#442E26]">
-                  Your URL password
-                </label>
+                <label className="font-bold ">Your URL password</label>
                 <div>
                   <input
                     required={needPassword}
                     disabled={!needPassword}
-                    className="w-full p-3 mt-1 text-sm border-2 border-gray-200 rounded-md"
+                    className={`w-full ${
+                      needPassword
+                        ? "hover:cursor-text"
+                        : "hover:cursor-not-allowed"
+                    }  p-3 mt-1 text-sm border rounded-md`}
                     id="password"
                     type="text"
                     value={URLPassword}
@@ -139,11 +152,13 @@ export default function Index({ html }) {
             <div className="border px-2 py-2 mt-5 rounded-md">
               Shortened URL:{" "}
               <Link target={"_blank"} href={`/${shortMeta.slug}`}>
-                <a target={"_blank"} className="underline mx-2 text-[#B98853]">
+                <a target={"_blank"} className="underline mx-2 text-green-500">
                   {host}/{shortMeta.slug || shortMeta.error}
                 </a>
               </Link>
-             
+            </div>
+            <div className="mt-2 text-center">
+              <DrawerLinks links={[]} />
             </div>
           </div>
         </div>
