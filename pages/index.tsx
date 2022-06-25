@@ -4,24 +4,31 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 import { ToastUX } from "../lib/toasts";
-import toast, { Toaster } from "react-hot-toast";
-import QRCode from "react-qr-code";
+import { Toaster } from "react-hot-toast";
+import FAQ from "../components/FAQ";
+
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkHtml from "remark-html";
 
 type ShortenedURL = {
   slug: string;
   origin: "web" | "bot";
   error?: boolean;
   isExisting?: boolean;
-  link?: string
+  link?: string;
   errResp?: string;
 };
 
-export default function Index() {
+export default function Index({ html }) {
   const [url, setUrl] = useState("");
   const [shortMeta, setShortMeta] = useState<ShortenedURL>({
     slug: "",
     origin: "web",
   });
+  const [needPassword, setNeedPassword] = useState(false);
+  const [URLPassword, setURLPassword] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [host, setHost] = useState("");
   const router = useRouter();
@@ -42,6 +49,7 @@ export default function Index() {
         body: JSON.stringify({
           url,
           origin: "WEB",
+          password: needPassword ? URLPassword : null,
         }),
       }
     );
@@ -72,14 +80,15 @@ export default function Index() {
   };
 
   return (
-    <section className="bg-gray-100  h-screen">
-      <div className="max-w-2xl mx-auto flex items-center justify-center h-screen">
+    <section className="bg-gray-100 p-5 h-screen">
+      <div className="max-w-2xl  mx-auto flex items-center justify-center h-screen">
         <div className="relative">
-          <label className="block text-5xl font-semibold" htmlFor="email">
+          <label className=" text-5xl font-semibold" htmlFor="email">
             URL shortener
           </label>
           <div className="relative">
-            <form onSubmit={handleSubmit}>
+            <form className="mt-4" onSubmit={handleSubmit}>
+              <label className="font-bold text-[#442E26]">Your URL</label>
               <input
                 required
                 className="w-full p-3 mt-1 text-sm border-2 border-gray-200 rounded-md"
@@ -90,9 +99,35 @@ export default function Index() {
                   setUrl((e.target as HTMLInputElement).value)
                 }
               />{" "}
+              <div className="mt-3">
+                <input
+                  type="checkbox"
+                  onChange={() => setNeedPassword(!needPassword)}
+                />{" "}
+                Make URL password-locked?
+              </div>
+              <div className="mt-2">
+                <label className="font-bold text-[#442E26]">
+                  Your URL password
+                </label>
+                <div>
+                  <input
+                    required={needPassword}
+                    disabled={!needPassword}
+                    className="w-full p-3 mt-1 text-sm border-2 border-gray-200 rounded-md"
+                    id="password"
+                    type="text"
+                    value={URLPassword}
+                    onChange={(e: SyntheticEvent<HTMLInputElement>) =>
+                      setURLPassword((e.target as HTMLInputElement).value)
+                    }
+                  />
+                </div>
+              </div>
               {/* https://bobbyhadz.com/blog/typescript-property-value-not-exist-type-eventtarget */}
               <div className="text-center">
                 <button
+                  type="submit"
                   className="border px-2 py-1 mt-5 rounded-md"
                   onClick={() => {}}
                 >
@@ -103,34 +138,31 @@ export default function Index() {
             <div className="border px-2 py-2 mt-5 rounded-md">
               Shortened URL:{" "}
               <Link target={"_blank"} href={`/${shortMeta.slug}`}>
-                <a target={"_blank"} className="underline mx-2 text-green-600">
+                <a target={"_blank"} className="underline mx-2 text-[#B98853]">
                   {host}/{shortMeta.slug || shortMeta.error}
                 </a>
               </Link>
-              <div></div>
+              {/* <FAQ file={html} /> */}
             </div>
-          </div>
-          <div className="flex items-center justify-center">
-            <QRCode
-              className="mt-3"
-              size={100}
-              value={host + "/" + shortMeta.slug}
-            />
           </div>
         </div>
       </div>
-      {/* <Toaster 
-      toastOptions={{
-        className: "p-2 border rounded-md mt-3 bg-green-200",
-        style: {
-          padding: '0.5rem',
-          borderWidth: '1px',
-          backgroundColor: 'rgb(187 247 208)',
-          borderRadius: '0.375rem'
-        }
-      }}
-      /> */}
+
       <Toaster />
     </section>
   );
+}
+
+export async function getStaticProps() {
+  const { read } = await import("to-vfile");
+  const file = await unified()
+    .use(remarkHtml)
+    .use(remarkParse)
+    .process(await read("faq.md"));
+
+  return {
+    props: {
+      html: file.value,
+    },
+  };
 }

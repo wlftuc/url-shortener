@@ -6,9 +6,12 @@ import { prisma } from "../../lib/prisma";
 import { Hash } from "../../lib/secure/secure";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  const { url, origin } = req.body;
+  const { url, origin, password: URLPassword } = req.body;
   const { password } = req.query;
   const { API_ROUTE_TOKEN } = process.env;
+
+
+  console.log(URLPassword)
 
   if (!password || password !== process.env.NEXT_PUBLIC_API_KEY) {
     return res.status(400).json({
