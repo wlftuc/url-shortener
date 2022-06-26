@@ -12,6 +12,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function DrawerLinks(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -58,20 +59,27 @@ export default function DrawerLinks(props) {
           </DrawerHeader>
           <DrawerBody>
             {links.length ? (
+              <Button
+                className="mb-2"
+                colorScheme={colorMode == "dark" ? "pink" : "red"}
+                onClick={clearLocalStorage}
+                size="sm"
+              >
+                Delete all links
+              </Button>
+            ) : (
+              ""
+            )}
+            {links.length ? (
               links.map((index, key) => {
                 return (
                   <div className="my-2 text-sm">
-                    <Button
-                      className="mb-2"
-                      colorScheme={colorMode == "dark" ? "pink" : "red"}
-                      onClick={clearLocalStorage}
-                      size="sm"
-                    >
-                      Delete all links
-                    </Button>
                     <div className="mb-4 rounded-md border p-2">
                       <p>
-                        <span className="font-bold">Link:</span> {index.link}
+                        <span className="font-bold">Link:</span>
+                        <Link href={index.slug}>
+                          <a>{index.link}</a>
+                        </Link>
                       </p>
                       <p className="font-bold">
                         <span className="font-bold">Password: </span>

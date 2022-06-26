@@ -36,8 +36,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     },
   });
 
-  console.log(!isExistingURL.locked, isExistingURL.password);
-
   if (isExistingURL && !isExistingURL.locked) {
     return res.status(202).json({
       slug: isExistingURL.slug,

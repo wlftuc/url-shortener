@@ -51,6 +51,7 @@ export default function Index({ html }) {
   const [localLinkMeta, setLocalLinkMeta] = useState({
     link: url,
     password: URLPassword,
+    slug: ""
   });
 
   const [loading, setLoading] = useState(false);
@@ -63,6 +64,7 @@ export default function Index({ html }) {
     setLocalLinkMeta({
       link: url,
       password: needPassword ? URLPassword.trim() : "",
+      slug: ""
     });
   }, [router.pathname, URLPassword, url]);
 
@@ -96,11 +98,22 @@ export default function Index({ html }) {
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    appendToLocalStorage(localLinkMeta);
-
     setLoading(true);
-    const shortenedUrl = await shortenURLTransition();
-    setLoading(false);
+    let shortenedUrl: ShortenedURL;
+
+    try {
+      shortenedUrl = await shortenURLTransition();
+    } catch (err) {
+      return toasts.isError("An error occurred while shortening this link.");
+    } finally {
+      setLoading(false);
+    }
+
+    appendToLocalStorage({
+      link: host + "/" + shortenedUrl.slug,
+      password: needPassword ? URLPassword.trim() : "",
+      slug: shortenedUrl.slug
+    });
 
     if (!shortenedUrl.error && !shortenedUrl.isExisting) {
       toasts.isSuccess();
@@ -191,7 +204,7 @@ export default function Index({ html }) {
                 label="Visit all your generated links"
                 links={[]}
               >
-                All your links can be found here.
+                All your links can be found here!
               </DrawerLinks>
             </div>
           </div>
