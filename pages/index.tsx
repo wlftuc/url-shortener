@@ -134,9 +134,7 @@ export default function Index({ html }) {
   return (
     <section className=" h-screen">
       <SEO
-        ogImageUrl={
-          "https://media.discordapp.net/attachments/841704583364608051/990634835645177956/unknown.png?width=839&height=615"
-        }
+        ogImageUrl={"/og.png"}
         title={"shortU"}
         description="an intuitive url shortener with some neat features"
       />
