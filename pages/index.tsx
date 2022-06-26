@@ -141,7 +141,7 @@ export default function Index({ html }) {
       <div className="max-w-2xl  mx-auto flex items-center justify-center h-screen">
         <div className="relative">
           <label className=" text-5xl font-semibold" htmlFor="email">
-            URL shortener
+              shortU
           </label>
           <div className="relative">
             <form className="mt-4" onSubmit={handleSubmit}>
