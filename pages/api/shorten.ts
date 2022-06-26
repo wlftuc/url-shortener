@@ -32,13 +32,13 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   const isExistingURL = await prisma.shortener.findFirst({
     where: {
       redirectTo: encryptedURL,
-      locked: locked
+      locked: locked,
     },
   });
 
-  console.log(!isExistingURL.locked, isExistingURL.password)
+  console.log(!isExistingURL.locked, isExistingURL.password);
 
-  if (isExistingURL && !isExistingURL.locked ) {
+  if (isExistingURL && !isExistingURL.locked) {
     return res.status(202).json({
       slug: isExistingURL.slug,
       link: hash.decrypt(isExistingURL.redirectTo),

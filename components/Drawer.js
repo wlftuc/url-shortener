@@ -9,12 +9,14 @@ import {
   Drawer,
   DrawerCloseButton,
   DrawerHeader,
+  useColorMode,
 } from "@chakra-ui/react";
 import { useState } from "react";
 
 export default function DrawerLinks(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [links, setLinks] = useState([]);
+  const { colorMode, toggleColorMode } = useColorMode();
 
   function fetchFromLocalStorage() {
     const allLinks = JSON.parse(localStorage.getItem("links") || "[]");
@@ -25,6 +27,11 @@ export default function DrawerLinks(props) {
   function openAndFetch() {
     fetchFromLocalStorage();
     onOpen();
+  }
+
+  function clearLocalStorage() {
+    localStorage.setItem("links", []);
+    fetchFromLocalStorage();
   }
   return (
     <div>
@@ -41,28 +48,59 @@ export default function DrawerLinks(props) {
         isOpen={isOpen}
       >
         <DrawerOverlay />
-        <DrawerContent backgroundColor={"rgb(17,17,17)"}>
+        <DrawerContent
+          backgroundColor={colorMode == "dark" ? "rgb(17,17,17)" : "white"}
+        >
           <DrawerCloseButton />
+
           <DrawerHeader borderBottomWidth="1px" fontSize={"small"}>
             {props.children}
           </DrawerHeader>
           <DrawerBody>
-            {links.map((index, key) => {
-              console.log(index.link, index.password);
-              return (
-                <div className="my-2 text-sm">
-                  <div className="mb-4 rounded-md border p-2">
-                    <p>
-                      <span className="font-bold">Link:</span> {index.link}
-                    </p>
-                    <p className="font-bold">
-                      <span className="font-bold">Password: </span>
-                      {!index.password.length ? <span className="text-red-200">Unprotected link</span>: index.password}
-                    </p>
+            {links.length ? (
+              links.map((index, key) => {
+                return (
+                  <div className="my-2 text-sm">
+                    <Button
+                      className="mb-2"
+                      colorScheme={colorMode == "dark" ? "pink" : "red"}
+                      onClick={clearLocalStorage}
+                      size="sm"
+                    >
+                      Delete all links
+                    </Button>
+                    <div className="mb-4 rounded-md border p-2">
+                      <p>
+                        <span className="font-bold">Link:</span> {index.link}
+                      </p>
+                      <p className="font-bold">
+                        <span className="font-bold">Password: </span>
+                        {!index.password.length ||
+                        index.password == "Not password protected" ? (
+                          <span
+                            className={
+                              colorMode == "dark"
+                                ? "text-red-200"
+                                : "text-red-500"
+                            }
+                          >
+                            Unprotected link
+                          </span>
+                        ) : (
+                          index.password
+                        )}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            ) : (
+              <div className="flex h-screen max-h-80 items-center justify-center">
+                <h1 className="mt-2 text-2xl font-bold text-center">
+                  You haven't shortened any links!
+                </h1>
+              </div>
+            )}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

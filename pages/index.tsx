@@ -62,7 +62,7 @@ export default function Index({ html }) {
     setHost(window.location.host);
     setLocalLinkMeta({
       link: url,
-      password: needPassword ? URLPassword.trim() : "Not password protected",
+      password: needPassword ? URLPassword.trim() : "",
     });
   }, [router.pathname, URLPassword, url]);
 
