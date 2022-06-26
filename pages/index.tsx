@@ -17,6 +17,7 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkHtml from "remark-html";
 import { ReactPropTypes } from "react";
+import { type } from "os";
 
 type ShortenedURL = {
   slug: string;
@@ -141,6 +142,7 @@ export default function Index({ html }) {
               <label className="font-bold">Your URL</label>
               <input
                 required
+                name="URL"
                 className="w-full  p-3 mt-1 text-sm border rounded-md"
                 id="url"
                 type="url"
@@ -150,16 +152,20 @@ export default function Index({ html }) {
                 }
               />{" "}
               <div className="mt-3">
-                <input
-                  type="checkbox"
-                  onChange={() => setNeedPassword(!needPassword)}
-                />{" "}
-                Make URL password-locked?
+                <label className="hover:cursor-pointer">
+                  <input
+                    name="Make URL password protected?"
+                    type="checkbox"
+                    onChange={() => setNeedPassword(!needPassword)}
+                  />{" "}
+                  Make URL password-locked?
+                </label>
               </div>
               <div className="mt-2">
                 <label className="font-bold ">Your URL password</label>
                 <div>
                   <input
+                    name="Password"
                     required={needPassword}
                     disabled={!needPassword}
                     className={`w-full ${
@@ -232,12 +238,11 @@ export async function getStaticProps() {
   };
 }
 
-type Prop = {
-  children: string;
-  onClick?: () => void;
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  children: React.ReactNode;
 };
 
-function BorderButton(props: Prop) {
+function BorderButton(props: ButtonProps) {
   return (
     <button
       {...props}
