@@ -3,6 +3,17 @@ import { useRouter } from "next/router";
 
 import Link from "next/link";
 
+// Chakra
+import {
+  Button,
+  Table,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Tab,
+} from "@chakra-ui/react";
+
 import { ToastUX } from "../lib/toasts";
 import { Toaster } from "react-hot-toast";
 
@@ -37,7 +48,10 @@ export default function Index({ html }) {
   });
   const [needPassword, setNeedPassword] = useState(false);
   const [URLPassword, setURLPassword] = useState("");
-  const [linkMeta, setLinkMeta] = useState([]);
+  const [localLinkMeta, setLocalLinkMeta] = useState({
+    link: url,
+    password: URLPassword,
+  });
 
   const [loading, setLoading] = useState(false);
   const [host, setHost] = useState("");
@@ -46,7 +60,11 @@ export default function Index({ html }) {
 
   useEffect(() => {
     setHost(window.location.host);
-  }, [router.pathname]);
+    setLocalLinkMeta({
+      link: url,
+      password: needPassword ? URLPassword.trim() : "Not password protected",
+    });
+  }, [router.pathname, URLPassword, url]);
 
   const shortenURLTransition = async () => {
     const res = await fetch(
@@ -59,7 +77,7 @@ export default function Index({ html }) {
         body: JSON.stringify({
           url,
           origin: "WEB",
-          password: needPassword ? URLPassword : null,
+          password: needPassword ? URLPassword.trim() : null,
           locked: needPassword,
         }),
       }
@@ -69,8 +87,16 @@ export default function Index({ html }) {
     return data;
   };
 
+  function appendToLocalStorage(object: any) {
+    const allEntries = JSON.parse(localStorage.getItem("links") || "[]");
+    allEntries.push(object);
+    localStorage.setItem("links", JSON.stringify(allEntries));
+  }
+
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+
+    appendToLocalStorage(localLinkMeta);
 
     setLoading(true);
     const shortenedUrl = await shortenURLTransition();
@@ -140,25 +166,33 @@ export default function Index({ html }) {
               </div>
               {/* https://bobbyhadz.com/blog/typescript-property-value-not-exist-type-eventtarget */}
               <div className="text-center">
-                <button
+                <Button
                   type="submit"
-                  className="border px-2 py-1 mt-5 rounded-md"
+                  isLoading={loading}
+                  loadingText="Working..."
+                  className=" px-2 py-1 mt-5 rounded-md"
                   onClick={() => {}}
                 >
-                  {loading ? "Working...." : "Shorten"}
-                </button>
+                  Shorten
+                </Button>
               </div>
             </form>
             <div className="border px-2 py-2 mt-5 rounded-md">
               Shortened URL:{" "}
               <Link target={"_blank"} href={`/${shortMeta.slug}`}>
-                <a target={"_blank"} className="underline mx-2 text-green-500">
+                <a target={"_blank"} className="underline mx-2 font-semibold">
                   {host}/{shortMeta.slug || shortMeta.error}
                 </a>
               </Link>
             </div>
             <div className="mt-2 text-center">
-              <DrawerLinks links={[]} />
+              <DrawerLinks
+                size={"sm"}
+                label="Visit all your generated links"
+                links={[]}
+              >
+                All your links can be found here.
+              </DrawerLinks>
             </div>
           </div>
         </div>

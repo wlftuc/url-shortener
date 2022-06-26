@@ -10,6 +10,13 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { password } = req.query;
   const { HASH_TOKEN } = process.env;
 
+  if (locked && URLPassword.trim() == "") {
+    return res.status(400).json({
+      error: true,
+      errResp: "Please don't input empty passwords!",
+    });
+  }
+
   if (!password || password !== process.env.NEXT_PUBLIC_API_KEY) {
     return res.status(400).json({
       error: true,
@@ -25,10 +32,13 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   const isExistingURL = await prisma.shortener.findFirst({
     where: {
       redirectTo: encryptedURL,
+      locked: locked
     },
   });
 
-  if (isExistingURL && !URLPassword) {
+  console.log(!isExistingURL.locked, isExistingURL.password)
+
+  if (isExistingURL && !isExistingURL.locked ) {
     return res.status(202).json({
       slug: isExistingURL.slug,
       link: hash.decrypt(isExistingURL.redirectTo),
