@@ -18,6 +18,7 @@ import remarkParse from "remark-parse";
 import remarkHtml from "remark-html";
 import { ReactPropTypes } from "react";
 import { type } from "os";
+import SEO from "../components/Seo";
 
 type ShortenedURL = {
   slug: string;
@@ -131,7 +132,14 @@ export default function Index({ html }) {
   };
 
   return (
-    <section className="  h-screen">
+    <section className=" h-screen">
+      <SEO
+        ogImageUrl={
+          "https://media.discordapp.net/attachments/841704583364608051/990634835645177956/unknown.png?width=839&height=615"
+        }
+        title={"shortU"}
+        description="an intuitive url shortener with some neat features"
+      />
       <div className="max-w-2xl  mx-auto flex items-center justify-center h-screen">
         <div className="relative">
           <label className=" text-5xl font-semibold" htmlFor="email">
