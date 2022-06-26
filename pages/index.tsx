@@ -4,15 +4,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 // Chakra
-import {
-  Button,
-  Table,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Tab,
-} from "@chakra-ui/react";
+import { Button, useColorMode } from "@chakra-ui/react";
 
 import { ToastUX } from "../lib/toasts";
 import { Toaster } from "react-hot-toast";
@@ -24,6 +16,7 @@ import DrawerLinks from "../components/Drawer";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkHtml from "remark-html";
+import { ReactPropTypes } from "react";
 
 type ShortenedURL = {
   slug: string;
@@ -41,6 +34,7 @@ type LinkMeta = {
 };
 
 export default function Index({ html }) {
+  //states
   const [url, setUrl] = useState("");
   const [shortMeta, setShortMeta] = useState<ShortenedURL>({
     slug: "",
@@ -51,20 +45,25 @@ export default function Index({ html }) {
   const [localLinkMeta, setLocalLinkMeta] = useState({
     link: url,
     password: URLPassword,
-    slug: ""
+    slug: "",
   });
 
   const [loading, setLoading] = useState(false);
   const [host, setHost] = useState("");
+
+  // router
   const router = useRouter();
+
+  //ux
   const toasts = new ToastUX();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   useEffect(() => {
     setHost(window.location.host);
     setLocalLinkMeta({
       link: url,
       password: needPassword ? URLPassword.trim() : "",
-      slug: ""
+      slug: "",
     });
   }, [router.pathname, URLPassword, url]);
 
@@ -112,7 +111,7 @@ export default function Index({ html }) {
     appendToLocalStorage({
       link: host + "/" + shortenedUrl.slug,
       password: needPassword ? URLPassword.trim() : "",
-      slug: shortenedUrl.slug
+      slug: shortenedUrl.slug,
     });
 
     if (!shortenedUrl.error && !shortenedUrl.isExisting) {
@@ -198,7 +197,7 @@ export default function Index({ html }) {
                 </a>
               </Link>
             </div>
-            <div className="mt-2 text-center">
+            <div className="mt-2 text-center space-x-2 flex">
               <DrawerLinks
                 size={"sm"}
                 label="Visit all your generated links"
@@ -206,6 +205,9 @@ export default function Index({ html }) {
               >
                 All your links can be found here!
               </DrawerLinks>
+              <BorderButton onClick={toggleColorMode}>
+                Switch color mode
+              </BorderButton>
             </div>
           </div>
         </div>
@@ -228,4 +230,20 @@ export async function getStaticProps() {
       html: file.value,
     },
   };
+}
+
+type Prop = {
+  children: string;
+  onClick?: () => void;
+};
+
+function BorderButton(props: Prop) {
+  return (
+    <button
+      {...props}
+      className="font-semibold border rounded-md p-2 max-w-2xl text-center text-sm"
+    >
+      {props.children}
+    </button>
+  );
 }

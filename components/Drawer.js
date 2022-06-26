@@ -34,8 +34,11 @@ export default function DrawerLinks(props) {
     localStorage.setItem("links", []);
     fetchFromLocalStorage();
   }
+
+
   return (
     <div>
+     
       <button
         onClick={openAndFetch}
         className="font-semibold border rounded-md p-2 max-w-2xl text-center text-sm"
@@ -76,7 +79,7 @@ export default function DrawerLinks(props) {
                   <div className="my-2 text-sm">
                     <div className="mb-4 rounded-md border p-2">
                       <p>
-                        <span className="font-bold">Link:</span>
+                        <span className="font-bold">Link: </span>
                         <Link href={index.slug}>
                           <a>{index.link}</a>
                         </Link>
