@@ -20,37 +20,23 @@ import { EyeIcon, EyeOffIcon, TrashIcon } from "@heroicons/react/outline";
 
 import { LocalLinkHistory } from "../lib/types";
 
+// MISC
+import { LocalFunctions } from "../lib/storage";
+
 export default function DrawerLinks(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [links, setLinks] = useState([]);
   const [revealPassword, setRevealPassword] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
 
-  function fetchFromLocalStorage() {
-    const allLinks = JSON.parse(localStorage.getItem("links") || "[]");
+  const local = new LocalFunctions(setLinks);
 
-    setLinks(allLinks);
-  }
+  
 
-  function openAndFetch() {
-    fetchFromLocalStorage();
-    onOpen();
-  }
 
-  function clearLocalStorage() {
-    localStorage.setItem("links", JSON.stringify([]));
-    fetchFromLocalStorage();
-  }
-
-  function deleteLinkAtSlug(i: number) {
-    const lc = JSON.parse(localStorage.getItem("links") || "[]");
-    const t = lc.splice(i, 1);
-    localStorage.setItem("links", JSON.stringify(lc));
-    fetchFromLocalStorage();
-  }
-
-  function revealIndividualLink(i: number) {
-    console.log(i);
+  function clearAndReFetch() {
+    local.clearLocalStorage()
+    local.fetchFromLocalStorage()
   }
 
   const PasswordRevealComponent = revealPassword ? EyeOffIcon : EyeIcon;
@@ -61,7 +47,7 @@ export default function DrawerLinks(props) {
   return (
     <div>
       <button
-        onClick={openAndFetch}
+        onClick={() => local.openAndFetch(onOpen)}
         className="font-semibold border rounded-md p-2 max-w-2xl text-center text-sm"
       >
         {props.label}
@@ -87,7 +73,7 @@ export default function DrawerLinks(props) {
                 <Button
                   className="mb-2"
                   colorScheme={colorMode == "dark" ? "pink" : "red"}
-                  onClick={clearLocalStorage}
+                  onClick={clearAndReFetch}
                   size="sm"
                 >
                   Delete all links
@@ -137,14 +123,14 @@ export default function DrawerLinks(props) {
                         <div className="float-right space-x-2">
                           <button
                             disabled
-                            onClick={() => revealIndividualLink(i)}
+                            onClick={() => local.revealIndividualLink(i)}
                           >
                             <Tooltip placement="top" label="soon :)">
                               <PasswordRevealComponent className="h-5 w-5" />
                             </Tooltip>
                           </button>
 
-                          <button onClick={() => deleteLinkAtSlug(i)}>
+                          <button onClick={() => local.deleteLinkAtSlug(i)}>
                             <TrashIcon className="h-5 w-5" />
                           </button>
                         </div>
