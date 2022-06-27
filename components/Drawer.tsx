@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
+// Next.js
+import Link from "next/link";
+
+// Chakra UI & Icons
 import {
   useDisclosure,
   Button,
@@ -14,10 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { EyeIcon, EyeOffIcon, TrashIcon } from "@heroicons/react/outline";
 
-import { useState } from "react";
-import Link from "next/link";
-import { arrayBuffer } from "stream/consumers";
-import next from "next";
+import { LocalLinkHistory } from "../lib/types";
 
 export default function DrawerLinks(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -109,7 +110,7 @@ export default function DrawerLinks(props) {
               ""
             )}
             {links.length ? (
-              links.map((index, i) => {
+              links.map((index: LocalLinkHistory, i: number) => {
                 return (
                   <div className="my-2 text-sm" key={i}>
                     <div className="mb-4 rounded-md border p-2">
@@ -134,17 +135,15 @@ export default function DrawerLinks(props) {
                           value={index.password || "Unprotected link"}
                         />
                         <div className="float-right space-x-2">
-                          
-                            <button
-                              disabled
-                              onClick={() => revealIndividualLink(i)}
-                            >
+                          <button
+                            disabled
+                            onClick={() => revealIndividualLink(i)}
+                          >
                             <Tooltip placement="top" label="soon :)">
-                         
                               <PasswordRevealComponent className="h-5 w-5" />
-                              </Tooltip>
-                            </button>
-                        
+                            </Tooltip>
+                          </button>
+
                           <button onClick={() => deleteLinkAtSlug(i)}>
                             <TrashIcon className="h-5 w-5" />
                           </button>

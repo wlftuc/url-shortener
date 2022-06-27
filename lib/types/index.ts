@@ -13,8 +13,14 @@ type LinkMeta = {
   password: string;
 };
 
+type LocalLinkHistory = {
+  link: string;
+  password: string;
+  slug: string;
+}
+
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
 };
 
-export type {ShortenedURL, LinkMeta, ButtonProps};
+export type {ShortenedURL, LinkMeta, ButtonProps, LocalLinkHistory};

@@ -16,7 +16,7 @@ import DrawerLinks from "../components/Drawer";
 import SEO from "../components/Seo";
 
 // Types
-import { ShortenedURL, LinkMeta, ButtonProps } from "../lib/types";
+import { ShortenedURL, ButtonProps } from "../lib/types";
 
 export default function Index() {
   //states
