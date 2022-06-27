@@ -10,12 +10,14 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   useColorMode,
+  Tooltip,
 } from "@chakra-ui/react";
-// import { EyeIcon, EyeOffIcon } from "@heroicons/react/outline";
+import { EyeIcon, EyeOffIcon, TrashIcon } from "@heroicons/react/outline";
 
 import { useState } from "react";
 import Link from "next/link";
 import { arrayBuffer } from "stream/consumers";
+import next from "next";
 
 export default function DrawerLinks(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -39,7 +41,18 @@ export default function DrawerLinks(props) {
     fetchFromLocalStorage();
   }
 
-  // const PasswordRevealComponent = revealPassword ? EyeOffIcon : EyeIcon;
+  function deleteLinkAtSlug(i: number) {
+    const lc = JSON.parse(localStorage.getItem("links") || "[]");
+    const t = lc.splice(i, 1);
+    localStorage.setItem("links", JSON.stringify(lc));
+    fetchFromLocalStorage();
+  }
+
+  function revealIndividualLink(i: number) {
+    console.log(i);
+  }
+
+  const PasswordRevealComponent = revealPassword ? EyeOffIcon : EyeIcon;
   const metaPasswordRevealText = revealPassword
     ? "Hide Password"
     : "Reveal Password";
@@ -89,16 +102,16 @@ export default function DrawerLinks(props) {
                   }`}
                   name={metaPasswordRevealText}
                 >
-                  {metaPasswordRevealText+'s'}
+                  {metaPasswordRevealText + "s"}
                 </Button>
               </div>
             ) : (
               ""
             )}
             {links.length ? (
-              links.map((index) => {
+              links.map((index, i) => {
                 return (
-                  <div className="my-2 text-sm" key={Math.random()}>
+                  <div className="my-2 text-sm" key={i}>
                     <div className="mb-4 rounded-md border p-2">
                       <p>
                         <span className="font-bold">Link: </span>
@@ -120,6 +133,22 @@ export default function DrawerLinks(props) {
                           }`}
                           value={index.password || "Unprotected link"}
                         />
+                        <div className="float-right space-x-2">
+                          
+                            <button
+                              disabled
+                              onClick={() => revealIndividualLink(i)}
+                            >
+                            <Tooltip placement="top" label="soon :)">
+                         
+                              <PasswordRevealComponent className="h-5 w-5" />
+                              </Tooltip>
+                            </button>
+                        
+                          <button onClick={() => deleteLinkAtSlug(i)}>
+                            <TrashIcon className="h-5 w-5" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
