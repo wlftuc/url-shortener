@@ -21,7 +21,6 @@ export default function DrawerLinks(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [links, setLinks] = useState([]);
   const [revealPassword, setRevealPassword] = useState(false);
-  const [revealIndividualPassword, setRevealIndividualPassword] = useState([]);
   const { colorMode, toggleColorMode } = useColorMode();
 
   function fetchFromLocalStorage() {
@@ -90,7 +89,7 @@ export default function DrawerLinks(props) {
                   }`}
                   name={metaPasswordRevealText}
                 >
-                  Reveal Passwords
+                  {metaPasswordRevealText+'s'}
                 </Button>
               </div>
             ) : (
