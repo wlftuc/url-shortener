@@ -10,9 +10,7 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   useColorMode,
-  Tooltip,
 } from "@chakra-ui/react";
-import { EyeIcon, EyeOffIcon } from "@heroicons/react/outline";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -39,7 +37,7 @@ export default function DrawerLinks(props) {
     fetchFromLocalStorage();
   }
 
-  const PasswordRevealComponent = revealPassword ? EyeOffIcon : EyeIcon;
+  //   const PasswordRevealComponent = revealPassword ? EyeOffIcon : EyeIcon;
   const metaPasswordRevealText = revealPassword
     ? "Hide Password"
     : "Reveal Password";
