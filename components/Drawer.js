@@ -10,13 +10,17 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   useColorMode,
+  Tooltip,
 } from "@chakra-ui/react";
+import { EyeIcon, EyeOffIcon } from "@heroicons/react/outline";
+
 import { useState } from "react";
 import Link from "next/link";
 
 export default function DrawerLinks(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [links, setLinks] = useState([]);
+  const [revealPassword, setRevealPassword] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
 
   function fetchFromLocalStorage() {
@@ -35,10 +39,13 @@ export default function DrawerLinks(props) {
     fetchFromLocalStorage();
   }
 
+  const PasswordRevealComponent = revealPassword ? EyeOffIcon : EyeIcon;
+  const metaPasswordRevealText = revealPassword
+    ? "Hide Password"
+    : "Reveal Password";
 
   return (
     <div>
-     
       <button
         onClick={openAndFetch}
         className="font-semibold border rounded-md p-2 max-w-2xl text-center text-sm"
@@ -62,14 +69,26 @@ export default function DrawerLinks(props) {
           </DrawerHeader>
           <DrawerBody>
             {links.length ? (
-              <Button
-                className="mb-2"
-                colorScheme={colorMode == "dark" ? "pink" : "red"}
-                onClick={clearLocalStorage}
-                size="sm"
-              >
-                Delete all links
-              </Button>
+              <div>
+                <Button
+                  className="mb-2"
+                  colorScheme={colorMode == "dark" ? "pink" : "red"}
+                  onClick={clearLocalStorage}
+                  size="sm"
+                >
+                  Delete all links
+                </Button>
+
+                <Button
+                  size="sm"
+                  colorScheme={colorMode == "dark" ? "pink" : "red"}
+                  onClick={() => setRevealPassword(!revealPassword)}
+                  className="mx-2 mb-2"
+                  name={metaPasswordRevealText}
+                >
+                  Reveal Passwords
+                </Button>
+              </div>
             ) : (
               ""
             )}
@@ -84,23 +103,22 @@ export default function DrawerLinks(props) {
                           <a>{index.link}</a>
                         </Link>
                       </p>
-                      <p className="font-bold">
+                      <div>
                         <span className="font-bold">Password: </span>
-                        {!index.password.length ||
-                        index.password == "Not password protected" ? (
-                          <span
-                            className={
-                              colorMode == "dark"
+
+                        <input
+                          type={revealPassword ? "text" : "password"}
+                          readOnly
+                          className={`px-1 rounded-sm bg-transparent ${
+                            !index.password.length && revealPassword
+                              ? colorMode == "dark"
                                 ? "text-red-200"
                                 : "text-red-500"
-                            }
-                          >
-                            Unprotected link
-                          </span>
-                        ) : (
-                          index.password
-                        )}
-                      </p>
+                              : ""
+                          }`}
+                          value={index.password || "Unprotected link"}
+                        />
+                      </div>
                     </div>
                   </div>
                 );

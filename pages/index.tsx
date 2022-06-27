@@ -134,14 +134,16 @@ export default function Index({ html }) {
   return (
     <section className=" h-screen">
       <SEO
-        ogImageUrl={"https://pbs.twimg.com/media/FWMHjz4aQAAizZV?format=jpg&name=medium"}
+        ogImageUrl={
+          "https://pbs.twimg.com/media/FWMHjz4aQAAizZV?format=jpg&name=medium"
+        }
         title={"shortU"}
         description="an intuitive url shortener with some neat features"
       />
       <div className="max-w-2xl  mx-auto flex items-center justify-center h-screen">
         <div className="relative">
           <label className=" text-5xl font-semibold" htmlFor="email">
-              shortU
+            shortU
           </label>
           <div className="relative">
             <form className="mt-4" onSubmit={handleSubmit}>
