@@ -35,7 +35,7 @@ type LinkMeta = {
   password: string;
 };
 
-export default function Index({ html }) {
+export default function Index() {
   //states
   const [url, setUrl] = useState("");
   const [shortMeta, setShortMeta] = useState<ShortenedURL>({
@@ -232,19 +232,7 @@ export default function Index({ html }) {
   );
 }
 
-export async function getStaticProps() {
-  const { read } = await import("to-vfile");
-  const file = await unified()
-    .use(remarkHtml)
-    .use(remarkParse)
-    .process(await read("faq.md"));
 
-  return {
-    props: {
-      html: file.value,
-    },
-  };
-}
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
