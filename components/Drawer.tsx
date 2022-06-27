@@ -11,14 +11,17 @@ import {
   DrawerHeader,
   useColorMode,
 } from "@chakra-ui/react";
+// import { EyeIcon, EyeOffIcon } from "@heroicons/react/outline";
 
 import { useState } from "react";
 import Link from "next/link";
+import { arrayBuffer } from "stream/consumers";
 
 export default function DrawerLinks(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [links, setLinks] = useState([]);
   const [revealPassword, setRevealPassword] = useState(false);
+  const [revealIndividualPassword, setRevealIndividualPassword] = useState([]);
   const { colorMode, toggleColorMode } = useColorMode();
 
   function fetchFromLocalStorage() {
@@ -37,7 +40,7 @@ export default function DrawerLinks(props) {
     fetchFromLocalStorage();
   }
 
-  //   const PasswordRevealComponent = revealPassword ? EyeOffIcon : EyeIcon;
+  // const PasswordRevealComponent = revealPassword ? EyeOffIcon : EyeIcon;
   const metaPasswordRevealText = revealPassword
     ? "Hide Password"
     : "Reveal Password";
@@ -79,9 +82,12 @@ export default function DrawerLinks(props) {
 
                 <Button
                   size="sm"
-                  colorScheme={colorMode == "dark" ? "pink" : "red"}
                   onClick={() => setRevealPassword(!revealPassword)}
-                  className="mx-2 mb-2"
+                  className={`mx-2 mb-2 ${
+                    colorMode == "dark"
+                      ? "text-white bg-white"
+                      : "text-black bg-black"
+                  }`}
                   name={metaPasswordRevealText}
                 >
                   Reveal Passwords
@@ -91,9 +97,9 @@ export default function DrawerLinks(props) {
               ""
             )}
             {links.length ? (
-              links.map((index, key) => {
+              links.map((index) => {
                 return (
-                  <div className="my-2 text-sm">
+                  <div className="my-2 text-sm" key={Math.random()}>
                     <div className="mb-4 rounded-md border p-2">
                       <p>
                         <span className="font-bold">Link: </span>
@@ -103,7 +109,6 @@ export default function DrawerLinks(props) {
                       </p>
                       <div>
                         <span className="font-bold">Password: </span>
-
                         <input
                           type={revealPassword ? "text" : "password"}
                           readOnly
