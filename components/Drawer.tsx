@@ -33,7 +33,7 @@ export default function DrawerLinks(props) {
   }
 
   function clearLocalStorage() {
-    localStorage.setItem("links", []);
+    localStorage.setItem("links", JSON.stringify([]));
     fetchFromLocalStorage();
   }
 

@@ -1,39 +1,22 @@
-import React, { SyntheticEvent, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
 
+// Next.js
+import { useRouter } from "next/router";
 import Link from "next/link";
 
 // Chakra
 import { Button, useColorMode } from "@chakra-ui/react";
 
+// Toasts
 import { ToastUX } from "../lib/toasts";
 import { Toaster } from "react-hot-toast";
 
-import { storeInLocalStorage } from "../lib/storage/setlocal";
-
+// Components
 import DrawerLinks from "../components/Drawer";
-
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkHtml from "remark-html";
-import { ReactPropTypes } from "react";
-import { type } from "os";
 import SEO from "../components/Seo";
 
-type ShortenedURL = {
-  slug: string;
-  origin: "web" | "bot";
-  error?: boolean;
-  isExisting?: boolean;
-  link?: string;
-  errResp?: string;
-};
-
-type LinkMeta = {
-  object: LinkMeta;
-  link: string;
-  password: string;
-};
+// Types
+import { ShortenedURL, LinkMeta, ButtonProps } from "../lib/types";
 
 export default function Index() {
   //states
@@ -96,7 +79,7 @@ export default function Index() {
     localStorage.setItem("links", JSON.stringify(allEntries));
   }
 
-  const handleSubmit = async (e: SyntheticEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
     setLoading(true);
@@ -155,7 +138,7 @@ export default function Index() {
                 id="url"
                 type="url"
                 value={url}
-                onChange={(e: SyntheticEvent<HTMLInputElement>) =>
+                onChange={(e: React.SyntheticEvent<HTMLInputElement>) =>
                   setUrl((e.target as HTMLInputElement).value)
                 }
               />{" "}
@@ -184,7 +167,7 @@ export default function Index() {
                     id="password"
                     type="text"
                     value={URLPassword}
-                    onChange={(e: SyntheticEvent<HTMLInputElement>) =>
+                    onChange={(e: React.SyntheticEvent<HTMLInputElement>) =>
                       setURLPassword((e.target as HTMLInputElement).value)
                     }
                   />
@@ -212,11 +195,7 @@ export default function Index() {
               </Link>
             </div>
             <div className="mt-2 text-center space-x-2 flex">
-              <DrawerLinks
-                size={"sm"}
-                label="Visit all your generated links"
-                links={[]}
-              >
+              <DrawerLinks size={"sm"} label="Visit all your generated links">
                 All your links can be found here!
               </DrawerLinks>
               <BorderButton onClick={toggleColorMode}>
@@ -231,12 +210,6 @@ export default function Index() {
     </section>
   );
 }
-
-
-
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  children: React.ReactNode;
-};
 
 function BorderButton(props: ButtonProps) {
   return (
