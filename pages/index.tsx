@@ -27,12 +27,6 @@ export default function Index() {
   });
   const [needPassword, setNeedPassword] = useState(false);
   const [URLPassword, setURLPassword] = useState("");
-  const [localLinkMeta, setLocalLinkMeta] = useState({
-    link: url,
-    password: URLPassword,
-    slug: "",
-  });
-
   const [loading, setLoading] = useState(false);
   const [host, setHost] = useState("");
 
@@ -45,11 +39,6 @@ export default function Index() {
 
   useEffect(() => {
     setHost(window.location.host);
-    setLocalLinkMeta({
-      link: url,
-      password: needPassword ? URLPassword.trim() : "",
-      slug: "",
-    });
   }, [router.pathname, URLPassword, url]);
 
   const shortenURLTransition = async () => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // Next.js
 import Link from "next/link";
@@ -24,25 +24,42 @@ import { LocalLinkHistory } from "../lib/types";
 import { LocalFunctions } from "../lib/storage";
 
 export default function DrawerLinks(props) {
+  //states
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [links, setLinks] = useState([]);
   const [revealPassword, setRevealPassword] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
+  const [lReveal, setLReveal] = useState([]);
 
+  useEffect(() => {
+    setLReveal(
+      Array.from(JSON.parse(localStorage.getItem("links") || "[]")).map(
+        //@ts-expect-error
+        (obj) => ({ ...obj, reveal: false })
+      )
+    );
+  }, [onOpen]);
+
+  // misc
   const local = new LocalFunctions(setLinks);
 
-  
-
-
   function clearAndReFetch() {
-    local.clearLocalStorage()
-    local.fetchFromLocalStorage()
+    local.clearLocalStorage();
+    local.fetchFromLocalStorage();
   }
 
-  const PasswordRevealComponent = revealPassword ? EyeOffIcon : EyeIcon;
-  const metaPasswordRevealText = revealPassword
-    ? "Hide Password"
-    : "Reveal Password";
+  function updateStateAtIndex(index: number) {
+    console.log("Function called.");
+    const newArr = [...lReveal];
+    newArr[index].reveal = !newArr[index]?.reveal;
+
+    setLReveal(newArr);
+  }
+
+  
+  // const metaPasswordRevealText = revealPassword
+  //   ? "Hide Password"
+  //   : "Reveal Password";
 
   return (
     <div>
@@ -78,41 +95,37 @@ export default function DrawerLinks(props) {
                 >
                   Delete all links
                 </Button>
-
-                <Button
-                  size="sm"
-                  onClick={() => setRevealPassword(!revealPassword)}
-                  className={`mx-2 mb-2 ${
-                    colorMode == "dark"
-                      ? "text-white bg-white"
-                      : "text-black bg-black"
-                  }`}
-                  name={metaPasswordRevealText}
-                >
-                  {metaPasswordRevealText + "s"}
-                </Button>
               </div>
             ) : (
               ""
             )}
             {links.length ? (
+              
               links.map((index: LocalLinkHistory, i: number) => {
+                const localReveal = lReveal[i]?.reveal
+                const PasswordRevealComponent = localReveal ? EyeOffIcon : EyeIcon;
                 return (
                   <div className="my-2 text-sm" key={i}>
                     <div className="mb-4 rounded-md border p-2">
                       <p>
                         <span className="font-bold">Link: </span>
+
                         <Link href={index.slug}>
                           <a>{index.link}</a>
                         </Link>
                       </p>
+
                       <div>
                         <span className="font-bold">Password: </span>
                         <input
-                          type={revealPassword ? "text" : "password"}
+                          type={
+                            localReveal 
+                              ? "text"
+                              : "password"
+                          }
                           readOnly
                           className={`px-1 rounded-sm bg-transparent ${
-                            !index.password.length && revealPassword
+                            !index.password.length && localReveal
                               ? colorMode == "dark"
                                 ? "text-red-200"
                                 : "text-red-500"
@@ -121,17 +134,14 @@ export default function DrawerLinks(props) {
                           value={index.password || "Unprotected link"}
                         />
                         <div className="float-right space-x-2">
-                          <button
-                            disabled
-                            onClick={() => local.revealIndividualLink(i)}
-                          >
-                            <Tooltip placement="top" label="soon :)">
-                              <PasswordRevealComponent className="h-5 w-5" />
-                            </Tooltip>
+                          <button onClick={() => updateStateAtIndex(i)}>
+                            <PasswordRevealComponent className="h-5 w-5 cursor-pointer" />
                           </button>
 
                           <button onClick={() => local.deleteLinkAtSlug(i)}>
-                            <TrashIcon className="h-5 w-5" />
+                            <Tooltip placement="top" label="delete link">
+                              <TrashIcon className="h-5 w-5" />
+                            </Tooltip>
                           </button>
                         </div>
                       </div>
