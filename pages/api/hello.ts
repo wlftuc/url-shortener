@@ -14,6 +14,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       works: true,
     });
   } catch (err) {
-    throw new Error(err, { cause: err });
+    throw new Error(err, {
+      cause: err
+    })
+    return res.status(400).json({
+      err: err.message
+    })
   }
 }
