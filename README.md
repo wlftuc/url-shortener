@@ -31,7 +31,7 @@ I made this project to revise a few fundamental concepts in the Node.js ecosyste
     npx next dev
     ```
 
-Once you add the feature you want to, create a branch with the feature's and send a PR.
+Once you add the feature you want to, create a branch with the feature's name and send a PR.
 
 
 ## Environment Variables
