@@ -49,14 +49,12 @@ export default function DrawerLinks(props) {
   }
 
   function updateStateAtIndex(index: number) {
-    console.log("Function called.");
     const newArr = [...lReveal];
     newArr[index].reveal = !newArr[index]?.reveal;
 
     setLReveal(newArr);
   }
 
-  
   // const metaPasswordRevealText = revealPassword
   //   ? "Hide Password"
   //   : "Reveal Password";
@@ -100,10 +98,11 @@ export default function DrawerLinks(props) {
               ""
             )}
             {links.length ? (
-              
               links.map((index: LocalLinkHistory, i: number) => {
-                const localReveal = lReveal[i]?.reveal
-                const PasswordRevealComponent = localReveal ? EyeOffIcon : EyeIcon;
+                const localReveal = lReveal[i]?.reveal;
+                const PasswordRevealComponent = localReveal
+                  ? EyeOffIcon
+                  : EyeIcon;
                 return (
                   <div className="my-2 text-sm" key={i}>
                     <div className="mb-4 rounded-md border p-2">
@@ -118,11 +117,7 @@ export default function DrawerLinks(props) {
                       <div>
                         <span className="font-bold">Password: </span>
                         <input
-                          type={
-                            localReveal 
-                              ? "text"
-                              : "password"
-                          }
+                          type={localReveal ? "text" : "password"}
                           readOnly
                           className={`px-1 rounded-sm bg-transparent ${
                             !index.password.length && localReveal
