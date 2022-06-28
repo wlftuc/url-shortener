@@ -2,19 +2,15 @@
 
 
 
-This URL shortener was made for 3 core reasons:
-
-1. Learn TypeScript
-
-2. Revisit Prisma
-
-3. Learn more about relational databases 
-
-4. Implement some concepts I recently learned about.
+An intuitive url shortener made within a few days, with some neat features.
 
 
 
-## Cloning
+
+
+## Contributing
+
+I made this project to revise a few fundamental concepts in the Node.js ecosystem. Contributions are not needed, but very much open. To contribute:
 
 
 1. Clone the repository
@@ -34,6 +30,8 @@ This URL shortener was made for 3 core reasons:
     ```bash    
     npx next dev
     ```
+
+Once you add the feature you want to, create a branch with the feature's and send a PR.
 
 
 ## Environment Variables
