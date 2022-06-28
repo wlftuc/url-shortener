@@ -186,10 +186,10 @@ export default function Index() {
                 </Button>
               </div>
             </form>
-            <div className="border px-2 py-2 mt-5 rounded-md">
+            <div className="border px-2 font-semibold py-2 mt-5 rounded-md">
               Shortened URL:{" "}
               <Link target={"_blank"} href={`/${shortMeta.slug}`}>
-                <a target={"_blank"} className="underline mx-2 font-semibold">
+                <a target={"_blank"} className="underline mx-2 font-bold">
                   {host}/{shortMeta.slug || shortMeta.error}
                 </a>
               </Link>
