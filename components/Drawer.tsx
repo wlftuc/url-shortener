@@ -66,7 +66,7 @@ export default function DrawerLinks(props) {
     if (newArr[index] !== undefined) {
       newArr[index].reveal = !newArr[index]?.reveal;
     }
-    setLReveal(oldArr => oldArr = newArr);
+    setLReveal(newArr);
   }
 
   async function copyToClipboard(text: string) {
