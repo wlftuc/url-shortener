@@ -14,6 +14,7 @@ import { Toaster } from "react-hot-toast";
 // Components
 import DrawerLinks from "../components/Drawer";
 import SEO from "../components/Seo";
+import BorderButton from "../components/BorderButton";
 
 // Types
 import { ShortenedURL, ButtonProps } from "../lib/types";
@@ -197,16 +198,5 @@ export default function Index() {
 
       <Toaster />
     </section>
-  );
-}
-
-function BorderButton(props: ButtonProps) {
-  return (
-    <button
-      {...props}
-      className="font-semibold border rounded-md p-2 max-w-2xl text-center text-sm"
-    >
-      {props.children}
-    </button>
   );
 }

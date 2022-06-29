@@ -20,6 +20,9 @@ import { EyeIcon, EyeOffIcon, TrashIcon } from "@heroicons/react/outline";
 
 import { LocalLinkHistory } from "../lib/types";
 
+// components
+import BorderButton from "./BorderButton";
+
 // MISC
 import { LocalFunctions } from "../lib/storage";
 
@@ -54,10 +57,6 @@ export default function DrawerLinks(props) {
 
     setLReveal(newArr);
   }
-
-  // const metaPasswordRevealText = revealPassword
-  //   ? "Hide Password"
-  //   : "Reveal Password";
 
   return (
     <div>
@@ -100,12 +99,15 @@ export default function DrawerLinks(props) {
             {links.length ? (
               links.map((index: LocalLinkHistory, i: number) => {
                 const localReveal = lReveal[i]?.reveal;
+                const metaPasswordRevealText = localReveal
+                  ? "Hide Password"
+                  : "Reveal Password";
                 const PasswordRevealComponent = localReveal
                   ? EyeOffIcon
                   : EyeIcon;
                 return (
                   <div className="my-2 text-sm" key={i}>
-                    <div className="mb-4 rounded-md border p-2">
+                    <div className="mb-4 rounded-md  border p-2">
                       <p>
                         <span className="font-bold">Link: </span>
 
@@ -115,7 +117,7 @@ export default function DrawerLinks(props) {
                       </p>
 
                       <div>
-                        <span className="font-bold">Password: </span>
+                        <span className="font-bold ">Password: </span>
                         <input
                           type={localReveal ? "text" : "password"}
                           readOnly
@@ -128,17 +130,26 @@ export default function DrawerLinks(props) {
                           }`}
                           value={index.password || "Unprotected link"}
                         />
-                        <div className="float-right space-x-2">
-                          <button onClick={() => updateStateAtIndex(i)}>
-                            <PasswordRevealComponent className="h-5 w-5 cursor-pointer" />
-                          </button>
+                        <span className="text-center mx-2 lg:mx-8 mt-2  space-x-2">
+                          <BorderButton
+                            aria-label={metaPasswordRevealText}
+                            name={metaPasswordRevealText}
+                            onClick={() => updateStateAtIndex(i)}
+                          >
+                            <PasswordRevealComponent className="h-4 mt w-4 cursor-pointer" />
+                          </BorderButton>
 
-                          <button onClick={() => local.deleteLinkAtSlug(i)}>
+                          <BorderButton
+                            aria-label={metaPasswordRevealText}
+                            name={metaPasswordRevealText}
+                            className="p-2 rounded-md bg-red-300"
+                            onClick={() => local.deleteLinkAtSlug(i)}
+                          >
                             <Tooltip placement="top" label="delete link">
-                              <TrashIcon className="h-5 w-5" />
+                              <TrashIcon className="h-4 w-4" />
                             </Tooltip>
-                          </button>
-                        </div>
+                          </BorderButton>
+                        </span>
                       </div>
                     </div>
                   </div>
