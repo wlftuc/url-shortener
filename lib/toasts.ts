@@ -16,4 +16,13 @@ export class ToastUX {
   isSuccess() {
     toast.success("Your URL has been shortened!");
   }
+
+  customMessage(message: string, type: "success" | "error") {
+    switch (type) {
+      
+      case "success":
+        return toast.success(message);
+      // add more types
+    }
+  }
 }

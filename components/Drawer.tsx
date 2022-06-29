@@ -15,13 +15,20 @@ import {
   DrawerHeader,
   useColorMode,
   Tooltip,
+  useClipboard,
 } from "@chakra-ui/react";
-import { EyeIcon, EyeOffIcon, TrashIcon } from "@heroicons/react/outline";
+import {
+  EyeIcon,
+  EyeOffIcon,
+  TrashIcon,
+  DuplicateIcon,
+} from "@heroicons/react/outline";
 
 import { LocalLinkHistory } from "../lib/types";
 
 // components
 import BorderButton from "./BorderButton";
+import { ToastUX } from "../lib/toasts";
 
 // MISC
 import { LocalFunctions } from "../lib/storage";
@@ -30,9 +37,11 @@ export default function DrawerLinks(props) {
   //states
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [links, setLinks] = useState([]);
-  const [revealPassword, setRevealPassword] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
   const [lReveal, setLReveal] = useState([]);
+
+  // UX
+  const toasts = new ToastUX();
 
   useEffect(() => {
     setLReveal(
@@ -56,6 +65,15 @@ export default function DrawerLinks(props) {
     newArr[index].reveal = !newArr[index]?.reveal;
 
     setLReveal(newArr);
+  }
+
+  function copyToClipboard(text: string) {
+    try {
+      navigator.clipboard.writeText(text);
+      toasts.customMessage("Copied to clipboard", "success");
+    } catch (err) {
+      toasts.isError("An error occurred while copying the text.");
+    }
   }
 
   return (
@@ -130,26 +148,51 @@ export default function DrawerLinks(props) {
                           }`}
                           value={index.password || "Unprotected link"}
                         />
-                        <span className="text-center mx-2 lg:mx-8 mt-2  space-x-2">
+                        <div className="text-center  mt-2  space-x-2">
                           <BorderButton
                             aria-label={metaPasswordRevealText}
                             name={metaPasswordRevealText}
                             onClick={() => updateStateAtIndex(i)}
                           >
-                            <PasswordRevealComponent className="h-4 mt w-4 cursor-pointer" />
+                            <Tooltip
+                              openDelay={0}
+                              borderRadius={"md"}
+                              placement="left"
+                              label={metaPasswordRevealText}
+                            >
+                              <PasswordRevealComponent className="h-4 mt w-4 cursor-pointer" />
+                            </Tooltip>
                           </BorderButton>
-
                           <BorderButton
-                            aria-label={metaPasswordRevealText}
-                            name={metaPasswordRevealText}
+                            aria-label="Copy to Clipboard"
+                            name="Copy to Clipboard"
+                            onClick={() => copyToClipboard(index.password)}
+                          >
+                            <Tooltip
+                              openDelay={0}
+                              borderRadius={"md"}
+                              placement="top"
+                              label="Copy to Clipboard"
+                            >
+                              <DuplicateIcon className="h-4 w-4" />
+                            </Tooltip>
+                          </BorderButton>
+                          <BorderButton
+                            aria-label={"Delete link"}
+                            name={"Delete link"}
                             className="p-2 rounded-md bg-red-300"
                             onClick={() => local.deleteLinkAtSlug(i)}
                           >
-                            <Tooltip placement="top" label="delete link">
+                            <Tooltip
+                              openDelay={0}
+                              borderRadius={"md"}
+                              placement="right"
+                              label="Delete link"
+                            >
                               <TrashIcon className="h-4 w-4" />
                             </Tooltip>
                           </BorderButton>
-                        </span>
+                        </div>
                       </div>
                     </div>
                   </div>
