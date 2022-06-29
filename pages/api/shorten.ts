@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { URL } from "url";
 import { prisma } from "../../lib/prisma";
 
 import { Hash } from "../../lib/secure/secure";

@@ -62,17 +62,38 @@ export default function DrawerLinks(props) {
 
   function updateStateAtIndex(index: number) {
     const newArr = [...lReveal];
-    newArr[index].reveal = !newArr[index]?.reveal;
 
-    setLReveal(newArr);
+    if (newArr[index] !== undefined) {
+      newArr[index].reveal = !newArr[index]?.reveal;
+    }
+    setLReveal(oldArr => oldArr = newArr);
   }
 
-  function copyToClipboard(text: string) {
+  async function copyToClipboard(text: string) {
+    if (!text.length) {
+      const res = await fetch("https://icanhazdadjoke.com/", {
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      const data = await res.json();
+
+      if (data.status == 200) {
+        navigator.clipboard.writeText(data.joke);
+        return toasts.customMessage(
+          "There is no password, so I copied a funny dad joke for you!",
+          "success"
+        );
+      } else
+        return toasts.isError(
+          "An error occurred while copying the non-existent password."
+        );
+    }
     try {
       navigator.clipboard.writeText(text);
-      toasts.customMessage("Copied to clipboard", "success");
+      return toasts.customMessage("Copied to clipboard", "success");
     } catch (err) {
-      toasts.isError("An error occurred while copying the text.");
+      return toasts.isError("An error occurred while copying the text.");
     }
   }
 
