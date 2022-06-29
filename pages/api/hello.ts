@@ -2,9 +2,6 @@ import { NextApiResponse } from "next";
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 import { NextApiRequest } from "next";
-import { Hash } from "../../lib/secure/secure";
-
-let { HASH_TOKEN, SECURE_AES_IV } = process.env;
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -14,11 +11,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       works: true,
     });
   } catch (err) {
-    throw new Error(err, {
-      cause: err
-    })
     return res.status(400).json({
-      err: err.message
-    })
+      err: err.message,
+    });
   }
 }
