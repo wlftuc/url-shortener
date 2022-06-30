@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 
-
 /**
  * @note - This does not work server-side. Should work in CRA, though!
  * @todo - Re-think logic to make it work server-side.
@@ -27,4 +26,3 @@ export function usePersistentState<T>(
 
   return [state, setState];
 }
-
