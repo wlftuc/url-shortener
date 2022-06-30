@@ -1,11 +1,24 @@
 import { useState, useEffect } from "react";
 
+
+/**
+ * @note - This does not work server-side. Should work in CRA, though!
+ * @todo - Re-think logic to make it work server-side.
+ * This hooks behaves identical to useState when working with server-generated pages.
+ * The only difference being that it writes to sessionStorage.
+ */
+
 export function usePersistentState<T>(
   key: string,
   initialValue: T
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
-  const [state, setState] = useState<T>(
-    () => JSON.parse(sessionStorage.getItem(key)) || initialValue
+  let useSession: string;
+
+  useEffect(() => {
+    useSession = sessionStorage.getItem(key);
+  }, []);
+  const [state, setState] = useState<T>(() =>
+    useSession ? JSON.parse(useSession) : initialValue
   );
 
   useEffect(() => {
@@ -15,6 +28,3 @@ export function usePersistentState<T>(
   return [state, setState];
 }
 
-/**
- * @NOTE - This does not work server-side. Should work in CRA, though. Maybe in Static too!
- */
