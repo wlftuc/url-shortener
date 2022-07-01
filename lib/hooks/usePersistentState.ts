@@ -17,7 +17,7 @@ export function usePersistentState<T>(
     useSession = sessionStorage.getItem(key);
   }, []);
   const [state, setState] = useState<T>(() =>
-    JSON.parse(useSession) || initialValue
+    useSession ? JSON.parse(useSession) || initialValue : initialValue
   );
 
   useEffect(() => {
